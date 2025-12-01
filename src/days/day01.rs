@@ -5,7 +5,7 @@ use std::io::BufRead;
 pub fn find_password(path: &str) -> i64 {
     let f = File::open(path).unwrap();
 
-    let lines  = io::BufReader::new(f)
+    let (_, pwd)  = io::BufReader::new(f)
         .lines()
         .filter_map(|rot| {
             if let Ok(res) = rot {
@@ -13,23 +13,20 @@ pub fn find_password(path: &str) -> i64 {
                 return if res.starts_with("R") { Some(*n) } else { Some(100-*n) }
             }
             None
+        })
+        .fold((50, 0),|(acc, pwd), next| {
+            let acc = (acc + next) % 100;
+            return match acc {
+                0 => (acc, pwd + 1),
+                _ => (acc, pwd)
+            }
         });
-
-    let mut acc = 50;
-    let mut passwrd = 0;
-    for n in lines {
-        acc += n;
-        acc %= 100;
-        if acc == 0 {
-            passwrd += 1;
-        }
-    }
-    passwrd
+    pwd
 }
 
 pub fn find_password_new_protocol(path: &str) -> i64 {
     let f = File::open(path).unwrap();
-    let lines  = io::BufReader::new(f)
+    let (_, pwd)  = io::BufReader::new(f)
         .lines()
         .filter_map(|rot| {
             if let Ok(res) = rot {
@@ -37,33 +34,20 @@ pub fn find_password_new_protocol(path: &str) -> i64 {
                 return if res.starts_with("R") { Some(*n) } else { Some(-1 * *n) }
             }
             None
+        })
+        .fold((50, 0), |(acc, pwd), next| {
+            let mut pwd = pwd + (next / 100).abs();
+            let eff_rot = next - (next / 100) * 100;
+
+            if (acc != 0) && (acc + eff_rot <= 0 ||  acc + eff_rot >= 100) { pwd += 1; }
+
+            let mut acc = (acc + eff_rot) % 100;
+            if acc < 0 { acc += 100; }
+
+            (acc, pwd)
         });
 
-    let mut acc = 50;
-    let mut passwrd = 0;
-    for n in lines {
-        println!("{acc}");
-        passwrd += (n / 100).abs();
-        let eff_rot = n - (n / 100) * 100;
-
-        if acc == 0 && eff_rot == 0 { continue; }
-        let prev_acc = acc;
-        acc += eff_rot;
-
-        if 0 < acc && acc < 100 { continue; }
-        if acc >= 100 {
-            acc %= 100;
-        } else if acc == 0 {
-        } else if acc < 0 {
-            acc = 100 + acc % 100;
-        }
-
-        if prev_acc != 0 {
-            passwrd += 1;
-        }
-    }
-    println!("{acc}");
-    passwrd
+    pwd
 }
 
 #[cfg(test)]
