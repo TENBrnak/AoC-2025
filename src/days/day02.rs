@@ -8,17 +8,12 @@ pub fn get_invalid_id_sum(path: &str) -> i64 {
         .split(",")
         .filter_map(|id_range| {
             let mut range_bounds = id_range.split("-");
-            let start = range_bounds.next();
-            let end = range_bounds.next();
-            if let (Some(start), Some(end)) = (start, end) {
+            if let (Some(start), Some(end)) = (range_bounds.next(), range_bounds.next()) {
                 if let (Ok(start), Ok(end)) = (start.parse::<i64>(), end.parse::<i64>()) {
-                    return Some((start, end))
+                    return Some(start..=end)
                 }
             }
             None
-        })
-        .map(|(start_range, end_range)| {
-            start_range..=end_range
         })
         .flatten()
         .filter_map(|id| {
@@ -43,17 +38,12 @@ pub fn get_new_invalid_id_sum(path: &str) -> i64 {
         .split(",")
         .filter_map(|id_range| {
             let mut range_bounds = id_range.split("-");
-            let start = range_bounds.next();
-            let end = range_bounds.next();
-            if let (Some(start), Some(end)) = (start, end) {
+            if let (Some(start), Some(end)) = (range_bounds.next(), range_bounds.next()) {
                 if let (Ok(start), Ok(end)) = (start.parse::<i64>(), end.parse::<i64>()) {
-                    return Some((start, end))
+                    return Some(start..=end)
                 }
             }
             None
-        })
-        .map(|(start_range, end_range)| {
-            start_range..=end_range
         })
         .flatten()
         .filter_map(|id| {
