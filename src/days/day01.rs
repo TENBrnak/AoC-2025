@@ -35,13 +35,14 @@ pub fn find_password_new_protocol(path: &str) -> i64 {
             }
             None
         })
-        .fold((50, 0), |(acc, pwd), next| {
-            let mut pwd = pwd + (next / 100).abs();
+        .fold((50, 0), |(mut acc, mut pwd), next| {
+            pwd += (next / 100).abs();
             let eff_rot = next - (next / 100) * 100;
 
             if (acc != 0) && (acc + eff_rot <= 0 ||  acc + eff_rot >= 100) { pwd += 1; }
 
-            let mut acc = (acc + eff_rot) % 100;
+            acc += eff_rot;
+            acc %= 100;
             if acc < 0 { acc += 100; }
 
             (acc, pwd)
@@ -58,21 +59,21 @@ mod tests {
 
     #[test]
     fn test1() {
-        insta::assert_snapshot!(format!("{}", find_password("inputs/01.in")), @"1139");
+        insta::assert_snapshot!(format!("{}", find_password("inputs/01/01.in")), @"1139");
     }
 
     #[test]
     fn test2() {
-        insta::assert_snapshot!(format!("{}", find_password_new_protocol("inputs/01.in")), @"6684");
+        insta::assert_snapshot!(format!("{}", find_password_new_protocol("inputs/01/01.in")), @"6684");
     }
 
     #[test]
     fn test3() {
-        insta::assert_snapshot!(format!("{}", find_password_new_protocol("inputs/01-example.in")), @"6");
+        insta::assert_snapshot!(format!("{}", find_password_new_protocol("inputs/01/01-example.in")), @"6");
     }
 
     #[test]
     fn test4() {
-        insta::assert_snapshot!(format!("{}", find_password("inputs/01-example.in")), @"3");
+        insta::assert_snapshot!(format!("{}", find_password("inputs/01/01-example.in")), @"3");
     }
 }
