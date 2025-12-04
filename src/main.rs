@@ -1,6 +1,6 @@
 mod days;
-use days::day01::{ find_password_new_protocol };
+use days::day03::get_joltage_12_sum;
 
 fn main() {
-    println!("{}", find_password_new_protocol("inputs/01-example.in"));
+    println!("{}",get_joltage_12_sum("inputs/03/03-example.in") )
 }
