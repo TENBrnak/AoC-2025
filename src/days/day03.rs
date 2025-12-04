@@ -88,6 +88,6 @@ mod tests {
 
     #[test]
     fn test4() {
-        insta::assert_snapshot!(format!("{}", get_joltage_12_sum("inputs/03/03.in")), @"169077317650774"); // TODO: WRONG!
+        insta::assert_snapshot!(format!("{}", get_joltage_12_sum("inputs/03/03.in")), @"169077317650774");
     }
 }
