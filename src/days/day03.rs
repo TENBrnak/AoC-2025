@@ -1,6 +1,6 @@
 use std::io;
 use std::fs::File;
-use std::io::{BufRead, Read};
+use std::io::{BufRead};
 
 pub fn get_joltage_2_sum(path: &str) -> i64 {
     let f = File::open(path).unwrap();

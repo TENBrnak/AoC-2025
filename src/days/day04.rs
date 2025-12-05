@@ -1,6 +1,6 @@
 use std::io;
 use std::fs::File;
-use std::io::{BufRead, Read};
+use std::io::BufRead;
 
 pub fn make_table(path: &str) -> Vec<Vec<i32>> {
     let f = File::open(path).unwrap();

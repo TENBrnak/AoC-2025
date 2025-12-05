@@ -1,6 +1,5 @@
 use std::io;
 use std::fs::File;
-use std::io::{BufRead, Read};
 
 pub fn get_invalid_id_sum(path: &str) -> i64 {
     let f = File::open(path).unwrap();
