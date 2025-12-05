@@ -1,6 +1,6 @@
 mod days;
-use days::day03::get_joltage_12_sum;
+use days::day05::get_total_fresh;
 
 fn main() {
-    println!("{}",get_joltage_12_sum("inputs/03/03-example.in") )
+    println!("{}",get_total_fresh("inputs/05/05-example.in") )
 }
